@@ -1,3 +1,62 @@
+# Kernel Configuration #
+
+### About this repository ###
+
+This is the repository where I version-control my kernel configuration and share it with friends.
+
+### Idiomatic Usage ###
+
+In case anyone else wants to do the same thing, I have explained my setup below:
+
+I have created a "meta" directory on my system for centralizing various files I've made that often "cut across" different machines, and that's where I clone this repository to:
+```sh
+# Be root
+sudo su
+
+# You can use any path for this, but this one is what I'll be using:
+MY_META_PATH="/srv/meta/public"
+
+# Create the git repository
+git clone https://github.com/chadjoan/cdj-kernel-config.git "${MY_META_PATH}/cdj-kernel-config"
+
+# Now the kernel config is in /srv/meta/public/cdj-kernel-config/kernel-config
+# and the comments are in /srv/meta/public/cdj-kernel-config/README.md
+```
+
+To avoid needing to copy my `.config` back and forth between my `/usr/src/linux` directory and this repository, symlinks are useful:
+```sh
+# Be root
+sudo su
+
+# Be in the Linux kernel's source code directory
+cd /usr/src/linux
+
+# Back up the existing config file!
+mv .config ".config.backup.$(date +'%Y-%m-%d.%H%M')"
+
+# Make a symlink from the Git repo's config to the Linux directory's config:
+ln -s /srv/meta/public/cdj-kernel-config/kernel-config .config
+```
+
+It is also helpful to symlink the comments file, to make it easy to edit comments while in a shell session that's parked in the `/etc` directory:
+```sh
+# Be root
+sudo su
+
+# Be in the /etc directory.
+cd /etc
+
+# Make a symlink from the Git repo's README.md (comments)
+# to something more appropriately named in /etc:
+ln -s /srv/meta/public/cdj-kernel-config/README.md /etc/kernel-config-comments.md
+```
+
+# Kernel Config Comments #
+
+The kernel's configuration menu lacks the ability to maintain comments for each configuration option.
+
+So instead, these comments shall be stored in this document, below.
+
 ### Chad Joan  2024-02-18 (6.4.12) ###
 
 Kernel 6.4.12-gentoo
