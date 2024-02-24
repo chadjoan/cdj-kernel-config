@@ -980,3 +980,6 @@ Sounds cool, why not. Also enabled `CONFIG_NTB_MSI` and all other sub-options as
 
 #### CONFIG_LOCALVERSION=".2024-02-22.1315"
 
+#### CONFIG_ZONEFS_FS=m
+Seems I missed enabling a filesystem earlier. Now it's not missed.
+(Made as minor revision on 2024-02-24 09:11)
