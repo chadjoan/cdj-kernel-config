@@ -23,32 +23,15 @@ git clone https://github.com/chadjoan/cdj-kernel-config.git "${MY_META_PATH}/cdj
 # and the comments are in /srv/meta/public/cdj-kernel-config/README.md
 ```
 
-To avoid needing to copy my `.config` back and forth between my `/usr/src/linux` directory and this repository, symlinks are useful:
+It is helpful to symlink the comments file, to make it easy to edit comments while in a shell session that's parked in other directories, like `/etc` or `/usr/src/linux`:
 ```sh
 # Be root
 sudo su
-
-# Be in the Linux kernel's source code directory
-cd /usr/src/linux
-
-# Back up the existing config file!
-mv .config ".config.backup.$(date +'%Y-%m-%d.%H%M')"
-
-# Make a symlink from the Git repo's config to the Linux directory's config:
-ln -s /srv/meta/public/cdj-kernel-config/kernel-config .config
-```
-
-It is also helpful to symlink the comments file, to make it easy to edit comments while in a shell session that's parked in the `/etc` directory:
-```sh
-# Be root
-sudo su
-
-# Be in the /etc directory.
-cd /etc
 
 # Make a symlink from the Git repo's README.md (comments)
-# to something more appropriately named in /etc:
+# to something more appropriately named:
 ln -s /srv/meta/public/cdj-kernel-config/README.md /etc/kernel-config-comments.md
+ln -s /srv/meta/public/cdj-kernel-config/README.md /usr/src/linux/kernel-config-comments.md
 ```
 
 ### Note about kernel config option names ###
