@@ -51,6 +51,27 @@ cd /etc
 ln -s /srv/meta/public/cdj-kernel-config/README.md /etc/kernel-config-comments.md
 ```
 
+### Note about kernel config option names ###
+ProTip for anyone who hasn't spent too much of their life staring at `make menuconfig`:<br>
+Typing '/' will make the config editor open a search prompt that allows one to look up the config option names (ex:&nbsp;`CONFIG_DEFAULT_HOSTNAME`).
+
+The information it brings up allows us to translate those names into the paths where we can find and edit those options.
+
+For example, searching for `CONFIG_DEFAULT_HOSTNAME` will bring up this information:
+```
+Symbol: DEFAULT_HOSTNAME [=cdj-kernel]
+Type  : string
+Defined at init/Kconfig:361
+Prompt: Default hostname
+Location:
+-> General setup
+(1)   -> Default hostname (DEFAULT_HOSTNAME [=cdj-kernel])
+```
+
+From that we know we can find this option under the `General setup` top menu, and it'll be called `Default hostname` in the list of options.
+
+The search is not an exact match either, so searching for `hostname` will also bring up the `CONFIG_DEFAULT_HOSTNAME` option's information. (It'll also bring up any other options that have `HOSTNAME` in their name, if they exist.)
+
 # Kernel Config Comments #
 
 The kernel's configuration menu lacks the ability to maintain comments for each configuration option.
