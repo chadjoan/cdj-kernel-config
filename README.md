@@ -6,7 +6,7 @@ This is the repository where I version-control my kernel configuration and share
 
 ### Idiomatic Usage ###
 
-In case anyone else wants to do the same thing, I have explained my setup below:
+In case anyone else wants to do the same thing (e.g. version control the Kernel's `.config`), I have explained my setup below:
 
 I have created a "meta" directory on my system for centralizing various files I've made that often "cut across" different machines, and that's where I clone this repository to:
 ```sh
@@ -19,11 +19,59 @@ MY_META_PATH="/srv/meta/public"
 # Create the git repository
 git clone https://github.com/chadjoan/cdj-kernel-config.git "${MY_META_PATH}/cdj-kernel-config"
 
-# Now the kernel config is in /srv/meta/public/cdj-kernel-config/kernel-config
+# Now the kernel config is in /srv/meta/public/cdj-kernel-config/k.config
 # and the comments are in /srv/meta/public/cdj-kernel-config/README.md
 ```
 
-It is helpful to symlink the comments file, to make it easy to edit comments while in a shell session that's parked in other directories, like `/etc` or `/usr/src/linux`:
+To avoid needing to copy my `.config` back and forth between
+the `/usr/src/linux` directory and this repository (ex:&nbsp;`/srv/meta/public/cdj-kernel-config`),
+symlinks are useful:
+```sh
+# Be root
+sudo su
+
+# Hardlink (or copy) the "kconfig-overwriteconfig-enable.sh" file into a place
+# where it will be executed every time a shell session begins.
+ln "/srv/meta/public/cdj-kernel-config/kconfig-overwriteconfig-enable.sh" "/etc/profile.d/kconfig-overwriteconfig-enable.sh"
+
+# Update the current shell's environment to pull changes from the new script:
+source /etc/profile
+# (And do this for any other currently open shells that might be used for
+# configuring the kernel.)
+
+# Optional test to ensure that the relevant environment variable was set correctly.
+# This should output "1".
+# If the output is blank or "0", then something went wrong, such as `/etc/profile`
+# not executing the scripts in `/etc/profile.d`, or some other script intercepting
+# the environment variable and unset'ing it or setting it to a falsey value.
+echo "$KCONFIG_OVERWRITECONFIG"
+# 1
+
+# Go to the Linux kernel's source code directory
+cd /usr/src/linux
+
+# Back up the existing config file! (And move/delete the original out of the way.)
+mv .config ".config.backup.$(date +'%Y-%m-%d.%H%M')"
+
+# Make a symlink from the Git repo's config to the Linux directory's config:
+ln -s /srv/meta/public/cdj-kernel-config/k.config .config
+```
+
+Caveat: The above setup is done on a Gentoo Linux system. Other distributions
+may have these files or directories in different places.
+
+The above example hardlinks the `kconfig-overwriteconfig-enable.sh` file
+in preference to copying or symlinking because it allows Git repositories
+in either directory to track changes to this file simultaneously.
+Of course, if the parent directories are on different file systems,
+one might settle for a copy or a symlink. There's nothing wrong with that.
+
+The `kconfig-overwriteconfig-enable.sh` file contains the code
+`export KCONFIG_OVERWRITECONFIG=1`, which is important for preventing the kernel
+from deleting the symlink whenever it writes changes to the config file.<br>
+Details: https://docs.kernel.org/kbuild/kconfig.html#kconfig-overwriteconfig
+
+It is also helpful to symlink the comments file, to make it easy to edit comments while in a shell session that's parked in other directories, like `/etc` or `/usr/src/linux`:
 ```sh
 # Be root
 sudo su
