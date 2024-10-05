@@ -983,3 +983,10 @@ Sounds cool, why not. Also enabled `CONFIG_NTB_MSI` and all other sub-options as
 #### CONFIG_ZONEFS_FS=m
 Seems I missed enabling a filesystem earlier. Now it's not missed.
 (Made as minor revision on 2024-02-24 09:11)
+
+#### CONFIG_LOCALVERSION=".2024-10-03.1022"
+
+#### CONFIG_INTEL=m, CONFIG_BT_BCM=m, CONFIG_BT_RTL=m, CONFIG_BT_MTK=m, CONFIG_BT_HCIBTUSB=m
+These were "=y", but they should be built as modules, because they probably
+won't load correctly as built-ins.
+
