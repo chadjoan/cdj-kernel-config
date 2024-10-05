@@ -862,10 +862,10 @@ echo 1 > /sys/kernel/tracing/per_cpu/cpu2/snapshot
 ```
 
 #### CONFIG_DEBUG_KOBJECT=n
-Leaving this disabled.
-"If you say Y here, some extra kobject debugging messages will be sent to the syslog."
-Sounds innocuous, right?
-Nah!
+Leaving this disabled.<br>
+`If you say Y here, some extra kobject debugging messages will be sent to the syslog.`<br>
+Sounds innocuous, right?<br>
+Nah!<br>
 https://bugzilla.redhat.com/show_bug.cgi?id=513606
 ```
 Enabling this causes massive spew of debug messages to the kernel log.
@@ -982,7 +982,7 @@ Sounds cool, why not. Also enabled `CONFIG_NTB_MSI` and all other sub-options as
 
 #### CONFIG_ZONEFS_FS=m
 Seems I missed enabling a filesystem earlier. Now it's not missed.
-(Made as minor revision on 2024-02-24 09:11)
+(Made as minor revision on 2024-02-24&nbsp;09:11)
 
 #### CONFIG_LOCALVERSION=".2024-10-03.1022"
 
