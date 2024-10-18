@@ -978,15 +978,58 @@ Looks like it might give more info in debug messages? Good?
 ```The PCI-E Non-transparent bridge hardware is a point-to-point PCI-E bus connecting 2 systems.```
 Sounds cool, why not. Also enabled `CONFIG_NTB_MSI` and all other sub-options as modules.
 
+## Chad Joan  2024-02-22 (6.7.5) ##
+
 #### CONFIG_LOCALVERSION=".2024-02-22.1315"
 
 #### CONFIG_ZONEFS_FS=m
 Seems I missed enabling a filesystem earlier. Now it's not missed.
 (Made as minor revision on 2024-02-24&nbsp;09:11)
 
+## Chad Joan  2024-10-03 (6.7.5) ##
+
 #### CONFIG_LOCALVERSION=".2024-10-03.1022"
 
 #### CONFIG_INTEL=m, CONFIG_BT_BCM=m, CONFIG_BT_RTL=m, CONFIG_BT_MTK=m, CONFIG_BT_HCIBTUSB=m
 These were "=y", but they should be built as modules, because they probably
 won't load correctly as built-ins.
+
+## Chad Joan  2024-10-17 (6.7.5) ##
+
+I wanted to know if my kernel supported the Baseus BA07 Bluetooth Adapter
+(Bluetooth v5.3). This bug report makes me suspect a kernel update is necessary:
+https://bugzilla.kernel.org/show_bug.cgi?id=217870
+
+Then again, this person reports having success with a 6.5 kernel:
+https://www.reddit.com/r/linux4noobs/comments/17pupma/baseus_ba07_bluetooth_53/
+
+I don't think I found any specific drivers for this, but I did enable a bunch
+of network devices and any other incidentally unset hardware that I ran across.
+
+## Chad Joan  2024-10-18 (6.7.5) ##
+
+#### CONFIG_LOCALVERSION=".2024-10-18.0908"
+
+#### CONFIG_IPV6_MULTIPLE_TABLE=y
+I received an "Error: Rule family not supported." error from WireGuard when
+running wg-quick. This was probably related to underlying IProute or NFTable
+commands failing, so I went looking and found this:
+https://gitlab.com/mobian1/issues/-/issues/61
+
+#### Various nftables modules from 'm' to 'y'
+While I was messing with CONFIG_IPV6_MULTIPLE_TABLE, I decided to change a bunch
+of nftables options over from 'm' to 'y'. They tend to be not directly tied
+to hardware, so the loss of modprobe functionality shouldn't hurt anything
+(we hope). This is essentially an optimization; because my systems use nftables
+exclusively now (and nftables is "the way forward"), it makes sense to optimize
+it. If this causes trouble in the future, it is entirely reasonable to make
+some of these options into modules.
+
+#### Enabling various other networking modules
+Also while I was messing with CONFIG_IPV6_MULTIPLE_TABLE, I enabled a bunch
+of networking options that weren't enabled. I tried to avoid enabling anything
+that would spam too many debug messages, or that was explicitly warned against.
+(As usual.) The hope is that this will reduce any future pains with important
+kernel networking features being missing once they are needed. Whether these
+were added as a module ('m') or built-in ('y') was a per-case judgement call.
 
